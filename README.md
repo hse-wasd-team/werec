@@ -12,10 +12,10 @@ Master’s Programme [System and Software Engineering](https://www.hse.ru/en/ma/
   
 ### Tool set:
 * github repository as git repository
-* github projects as task manager
+* github projects as task tracker
 * github wiki as documentation storage
 * telegram as communication tool
-* draw.io for visualization
+* draw.io for visualization and modeling
 
 View our progress at the [board](https://github.com/users/warkosanta/projects/3/views/1).
 
