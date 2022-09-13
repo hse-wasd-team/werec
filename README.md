@@ -5,6 +5,7 @@ Group project for [Advanced Software Design](https://objectoriented.ru/asd) and 
 Master’s Programme [System and Software Engineering](https://www.hse.ru/en/ma/se/about) at HSE University, 2022.
 
 ### Team members:
+* Mahmoud Hossameldin
 * Ramilya Yusupova  
 * Arina Smirnova 
 * Sergey Zhurbey 
