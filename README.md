@@ -9,7 +9,7 @@ Master’s Programme [System and Software Engineering](https://www.hse.ru/en/ma/
 * Ramilya Yusupova  
 * Arina Smirnova 
 * Sergey Zhurbey 
-* Andrey Kahn
+* Andrey Kan
   
 ### Tool set:
 * github repository as git repository
