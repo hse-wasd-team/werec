@@ -1,0 +1,362 @@
+openapi: 3.0.3
+info:
+  title: Swagger WeRec - OpenAPI 3.0
+  description: ""
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+externalDocs:
+  description: Find out more
+  url: https://github.com/ramilyayus/WeRec-specs
+tags:
+  - name: feed
+    description: Feed managment
+  - name: video
+    description: Get videos
+paths:
+  /videos/{feedId}/{keyword}/:
+    get:
+      tags:
+        - video
+      summary: Get videos
+      description: Returns an array of video links
+      operationId: getVideosByFeedId
+      parameters:
+        - name: feedId
+          in: path
+          description: ID of feed
+          required: true
+          schema:
+            type: string
+        - name: keyword
+          in: path
+          description: keyword
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns list of video links
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                  [
+                    https://www.youtube.com/watch?v=o1YenjwOp-A,
+                    https://www.youtube.com/watch?v=cjO_yorTfP8,
+                  ]
+        "400":
+          description: Invalid feed id or keyword supplied
+        "404":
+          description: Feed or keyword not found
+  /feed/{feedId}:
+    parameters:
+      - name: feedId
+        in: path
+        description: ID of the feed that needs to be altered
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - feed
+      summary: Get feed information by id
+      description: Returns feed information
+      operationId: getFeedById
+      responses:
+        "200":
+          description: Returns feed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Feed not found
+    delete:
+      tags:
+        - feed
+      summary: Delete feed by ID
+      operationId: deleteFeed
+      responses:
+        "200":
+          description: Successfuly deleted
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Feed not found
+    put:
+      tags:
+        - feed
+      summary: Update an existing feed
+      description: Update an existing feed by Id
+      operationId: updateFeed
+      requestBody:
+        description: Update an existent feed
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostPutFeedExample"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/PostPutFeedExample"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PostPutFeedExample"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Feed"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Feed not found
+        "405":
+          description: Validation exception
+  /feed:
+    get:
+      tags:
+        - feed
+      summary: Get all feeds
+      description: Returns all feed information
+      operationId: getFeeds
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllFeedExample"
+    post:
+      tags:
+        - feed
+      summary: Add new feed
+      description: Add new feed
+      operationId: addFeed
+      requestBody:
+        description: Create new Feed
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostPutFeedExample"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/PostPutFeedExample"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PostPutFeedExample"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Feed"
+        "405":
+          description: Invalid input
+
+components:
+  schemas:
+    AllFeedExample:
+      type: array
+      items:
+        $ref: "#/components/schemas/Feed"
+      example:
+        [
+          {
+            id: PYSQw6,
+            creatorId: LkxGoU,
+            tags: [relax, chill],
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            visibility: "public",
+            configurations:
+              [
+                {
+                  keyword: "music",
+                  quantity: 4,
+                  mode: new,
+                  sources:
+                    [
+                      https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw,
+                      https://www.youtube.com/c/MTV,
+                    ],
+                },
+                {
+                  keyword: "music",
+                  quantity: 4,
+                  mode: new,
+                  sources:
+                    [
+                      https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw,
+                      https://www.youtube.com/c/MTV,
+                    ],
+                },
+              ],
+            raiting: { raiting: 6.9, comments: [10/10, wow] },
+          },
+          {
+            id: PYSQw6,
+            creatorId: LkxGoU,
+            tags: [relax, chill],
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            visibility: "public",
+            configurations:
+              [
+                {
+                  keyword: "music",
+                  quantity: 4,
+                  mode: new,
+                  sources:
+                    [
+                      https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw,
+                      https://www.youtube.com/c/MTV,
+                    ],
+                },
+                {
+                  keyword: "music",
+                  quantity: 4,
+                  mode: new,
+                  sources:
+                    [
+                      https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw,
+                      https://www.youtube.com/c/MTV,
+                    ],
+                },
+              ],
+            raiting: { raiting: 6.9, comments: [10/10, wow] },
+          },
+          {
+            id: PYSQw6,
+            creatorId: LkxGoU,
+            tags: [relax, chill],
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            visibility: "public",
+            configurations:
+              [
+                {
+                  keyword: "music",
+                  quantity: 4,
+                  mode: new,
+                  sources:
+                    [
+                      https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw,
+                      https://www.youtube.com/c/MTV,
+                    ],
+                },
+                {
+                  keyword: "music",
+                  quantity: 4,
+                  mode: new,
+                  sources:
+                    [
+                      https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw,
+                      https://www.youtube.com/c/MTV,
+                    ],
+                },
+              ],
+            raiting: { raiting: 6.9, comments: [10/10, wow] },
+          },
+        ]
+    PostPutFeedExample:
+      type: object
+      properties:          
+        configurations:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeedConfiguration"
+        tags:
+          type: array
+          example: [relax, chill]
+        description:
+          type: string
+          example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        visibility:
+          type: string
+          description: visibility of the feed
+          example: public
+          enum:
+            - public
+            - private
+    Feed:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "PYSQw6"
+        creatorId:
+          type: string
+          example: "LkxGoU"
+        tags:
+          type: array
+          example: [relax, chill]
+        description:
+          type: string
+          example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        visibility:
+          type: string
+          description: visibility of the feed
+          example: public
+          enum:
+            - public
+            - private
+        configurations:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeedConfiguration"
+        raiting:
+          $ref: "#/components/schemas/Raiting"
+      xml:
+        name: feed
+    FeedConfiguration:
+      type: object
+      properties:
+        keyword:
+          type: string
+          example: "music"
+        quantity:
+          type: integer
+          example: 4
+        mode:
+          type: string
+          description: Mode
+          example: new
+          enum:
+            - new
+            - random
+        sources:
+          type: array
+          items:
+            type: string
+          example:
+            [
+              https://www.youtube.com/watch?v=eLAHSRmFFzE,
+              https://www.youtube.com/watch?v=gxLKrLqXGoM,
+            ]
+      xml:
+        name: feedConfiguration
+    Raiting:
+      type: object
+      properties:
+        raiting:
+          type: number
+          example: 6.9
+        comments:
+          type: array
+          items:
+            example: [10/10, wow]
+      xml:
+        name: raiting
