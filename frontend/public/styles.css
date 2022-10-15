@@ -1,0 +1,179 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", serif;
+}
+
+.content {
+  width: 420px;
+  margin-top: 100px;
+}
+
+.custom-card {
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 10px 10px #e0e0e0;
+  word-break: break-word !important;
+  word-wrap: break-word !important;
+  /* height: 210px; */
+  color: #212529 !important;
+}
+
+.product-rating {
+  font-size: 50px;
+}
+
+.stars i {
+  font-size: 18px;
+  color: #28a745;
+}
+
+.rating-text {
+  margin-top: 10px;
+}
+
+.detailed-head {
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+.author {
+  color: grey;
+  text-decoration: none;
+}
+
+.small-box {
+  padding-top: 10px;
+}
+.middle-box {
+  border-left: 1px solid;
+  border-right: 1px solid;
+}
+
+.small-box-top {
+  font-size: 40px;
+}
+
+.recipe-hr {
+  margin: 64px auto 56px;
+  opacity: 0.3;
+  max-width: 978px;
+  width: 100%;
+  color: grey;
+}
+
+.step {
+  font-weight: bolder !important;
+}
+.my-li {
+  margin-top: 15px;
+}
+
+div.scrollable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+}
+
+div.scrollable .scrollable-item {
+  display: inline-block;
+  width: 8rem;
+  height: 8rem;
+  filter: brightness(70%);
+}
+
+div.scrollable::-webkit-scrollbar {
+  height: 5px;
+}
+
+/* Handle */
+div.scrollable::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.text-image {
+  position: absolute !important;
+  display: inline-block;
+  top: 42%;
+  right: 12%;
+  left: 12%;
+  color: white;
+  text-transform: uppercase;
+  white-space: normal;
+  vertical-align: middle;
+  height: auto;
+}
+
+.round-img:hover {
+  opacity: 0.5;
+}
+
+.my-feed-main {
+  text-align: center;
+}
+
+.my-feed-main h1,
+h2 {
+  margin: 30px 10px;
+}
+
+.img-detailed {
+  max-width: 480px;
+  max-height: 480px;
+
+  height: 94vw;
+  width: 94vw;
+
+  background-size: cover;
+  border-radius: 10px;
+}
+
+
+.custom-tab {
+  color: #4a4a4a !important;
+  text-transform: uppercase !important;
+}
+
+.custom-tab:hover {
+  color: rgb(50, 191, 243) !important;
+}
+.active-custom {
+  color: rgb(50, 191, 243) !important;
+  border-bottom: 1px solid rgb(50, 191, 243) !important;
+}
+
+.floating-arrow-button {
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+  border: 0;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+}
+.tag{
+    background-color: rgb(0,0,0,0.08);
+
+    border-radius: 30%;
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px;
+}
+
+.custom-button{
+  background-color: rgb(177, 13, 177) !important;
+  color: white !important;
+}
+
+.custom-round-button{
+  border-radius: 100%;
+  background-color: rgb(177, 13, 177) !important;
+  color: white !important;
+  width: 60px;
+  height: 60px;
+  border: 0;
+  font-size: 35px;
+  box-shadow: 0px 10px 10px #e0e0e0;
+}
