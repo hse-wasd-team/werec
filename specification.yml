@@ -180,7 +180,7 @@ components:
       example:
         [
           {
-            id: PYSQw6,
+            id: 72fd104c-4500-4c9c-8b49-223ea1d26d4b,
             creatorId: LkxGoU,
             name: feedname,
             tags: [relax, chill],
@@ -212,7 +212,7 @@ components:
             raiting: { raiting: 6.9, comments: [10/10, wow] },
           },
           {
-            id: PYSQw6,
+            id: 1e1adbf9-fad5-417b-9eed-900146ce65d1,
             creatorId: LkxGoU,
             name: feedname,
             tags: [relax, chill],
@@ -244,7 +244,7 @@ components:
             raiting: { raiting: 6.9, comments: [10/10, wow] },
           },
           {
-            id: PYSQw6,
+            id: 5032011d-6c76-4f49-9829-295f065215a4,
             creatorId: LkxGoU,
             name: feedname,
             tags: [relax, chill],
@@ -304,7 +304,7 @@ components:
       properties:
         id:
           type: string
-          example: "PYSQw6"
+          example: "e56139c9-ee6f-4775-a581-34ce8c1878e0"
         name:
           type: string
           example: "Feed name"  
