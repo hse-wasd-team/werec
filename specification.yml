@@ -182,6 +182,7 @@ components:
           {
             id: PYSQw6,
             creatorId: LkxGoU,
+            name: feedname,
             tags: [relax, chill],
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
             visibility: "public",
@@ -213,6 +214,7 @@ components:
           {
             id: PYSQw6,
             creatorId: LkxGoU,
+            name: feedname,
             tags: [relax, chill],
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
             visibility: "public",
@@ -244,6 +246,7 @@ components:
           {
             id: PYSQw6,
             creatorId: LkxGoU,
+            name: feedname,
             tags: [relax, chill],
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
             visibility: "public",
@@ -293,12 +296,18 @@ components:
           enum:
             - public
             - private
+        name: 
+          type: string
+          example: "Feed name" 
     Feed:
       type: object
       properties:
         id:
           type: string
           example: "PYSQw6"
+        name:
+          type: string
+          example: "Feed name"  
         creatorId:
           type: string
           example: "LkxGoU"
