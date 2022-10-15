@@ -3,10 +3,12 @@ info:
   title: Swagger WeRec - OpenAPI 3.0
   description: ""
   termsOfService: http://swagger.io/terms/
-  version: 1.0.0
+  version: 1.0.1
 externalDocs:
   description: Find out more
-  url: https://github.com/ramilyayus/WeRec-specs
+  url: https://github.com/hse-wasd-team/werec/wiki/About
+servers:
+  - url: /api/v1/
 tags:
   - name: feed
     description: Feed managment
