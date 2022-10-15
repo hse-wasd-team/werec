@@ -29,3 +29,13 @@ View our progress at the [board](https://github.com/users/warkosanta/projects/3/
 * Second-end users then can access the chat bot and consume verified content
 
 Read more about the project at our [wiki](https://github.com/warkosanta/WeRec-specs/wiki/About).
+
+## Basic project structure
+More specific modules structure is described in corresponding folders
+
+```
+├── systemAnalysis  # all the system analysis stuff like all types of diagrams, user stories and reports
+├── frontend
+├── backend
+│   ├── docs
+```
