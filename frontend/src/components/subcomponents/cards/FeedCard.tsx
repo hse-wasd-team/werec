@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../globalState/hooks";
 import Tag from "../Tag";
 
-function FoodCard(props: Feed) {
+function FeedCard(props: Feed) {
   const dispatch = useAppDispatch();
   return (
     <div
@@ -73,4 +73,4 @@ function FoodCard(props: Feed) {
   );
 }
 
-export default FoodCard;
+export default FeedCard;

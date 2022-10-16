@@ -1,5 +1,5 @@
 import * as React from "react";
-import FoodCard from "./FoodCard";
+import FeedCard from "./FeedCard";
 import { useState, useEffect } from "react";
 import Feed from "../../interfaces/Feed";
 import { useAppSelector } from "../../../globalState/hooks";
@@ -49,7 +49,7 @@ function CardGroup(props: CardGroup) {
       >
         {feeds.map((el, ind) => {
           return (
-            <FoodCard
+            <FeedCard
               id={el.id}
               key={ind}
               name={el.name}
