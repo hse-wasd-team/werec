@@ -19,17 +19,14 @@ function FoodCard(props: Feed) {
           dispatch(
             navigateToDetailedPage({
               id: props.id,
-              title: props.title,
+              name: props.name,
               // author: props.author,
               // averageRating: props.averageRating,
               // totalReviewCount: props.totalReviewCount,
               description: props.description,
-              // numberOfVideosPerRequest: props.numberOfVideosPerRequest,
-              keywords: props.keywords,
-              // sourceLinks: props.sourceLinks
-              // visiiblity: props.visiiblity,
-              // tags: props.tags,
-              // isMyCard: props.isMyCard
+              configurations: props.configurations,
+              visiiblity: "public",
+              tags: []
             })
           )
         }
@@ -57,7 +54,7 @@ function FoodCard(props: Feed) {
                 flexGrow: "12",
               }}
             >
-              {props.title}
+              {props.name}
             </h5>
             {/* <div className="scrollable">
               {props.tags.map((tag, index) => {

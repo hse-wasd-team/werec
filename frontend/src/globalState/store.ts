@@ -1,14 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {currentNavbarItemReducer, currentTabItemReducer, currentDetailedPageReducer, myFeedsReducer} from "./reducerActions"
+import {apiSlice} from "./api"
 
 export const store = configureStore({
   reducer: {
     currentNavbarItem: currentNavbarItemReducer,
     currentTabItem: currentTabItemReducer,
     currentDetailedPage: currentDetailedPageReducer,
-    myFeeds: myFeedsReducer
-    // currentFeed: currentFeedReducer
-}})
+    myFeeds: myFeedsReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
+},
+middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(apiSlice.middleware)
+})
+
 
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

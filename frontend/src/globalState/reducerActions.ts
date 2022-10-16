@@ -28,10 +28,12 @@ const currentTabItem = createSlice({
 
 
 var initialState: Feed = {
-    id: 0,
-    title: 'title',
+    id: "0",
+    name: 'title',
     description: '',
-    keywords: []
+    configurations: [],
+    visiiblity: 'public',
+    tags: []
 }
 
 
@@ -41,17 +43,15 @@ const currentDetailedPage = createSlice({
     reducers: {
         navigateToDetailedPage(state, action: PayloadAction<Feed>){
             state.id = action.payload.id
-            state.title = action.payload.title
+            state.name = action.payload.name
             // state.author = action.payload.author
             // state.averageRating = action.payload.averageRating
             // state.totalReviewCount = action.payload.totalReviewCount
             state.description = action.payload.description
-            // state.numberOfVideosPerRequest = action.payload.numberOfVideosPerRequest
-            // state.sourceLinks = action.payload.sourceLinks
-            state.keywords = action.payload.keywords
+            state.configurations = action.payload.configurations
     
-            // state.tags = action.payload.tags
-            // state.visiiblity = action.payload.visiiblity
+            state.tags = action.payload.tags
+            state.visiiblity = action.payload.visiiblity
             // state.isMyCard = action.payload.isMyCard
         }
     }
@@ -68,13 +68,13 @@ const myFeeds = createSlice({
         editFeed(state, action: PayloadAction<Feed>){
             const ind = state.findIndex(feed => feed.id === action.payload.id)
             state[ind].description = action.payload.description
-            state[ind].keywords = action.payload.keywords
-            // state[ind].numberOfVideosPerRequest = action.payload.numberOfVideosPerRequest
-            // state[ind].sourceLinks = action.payload.sourceLinks
-            state[ind].title = action.payload.title
+            state[ind].configurations = action.payload.configurations
+            state[ind].name = action.payload.name
             state[ind].id = action.payload.id
+            state[ind].tags = action.payload.tags
+            state[ind].visiiblity = action.payload.visiiblity
         },
-        deleteFeed(state, action: PayloadAction<number>){
+        deleteFeed(state, action: PayloadAction<string>){
             const ind = state.findIndex(feed => feed.id === action.payload)
             state.splice(ind,1)
 
@@ -84,18 +84,6 @@ const myFeeds = createSlice({
       
 })
 
-
-// const currentFeed = createSlice({
-//     name: "currentFeed",
-//     initialState: {useQuery: () => api.useGetPopularPostsQuery, header: "", tag: ""},
-//     reducers:{
-//         navigateToFeed(state, action){
-//             state.useQuery = action.payload.useQuery
-//             state.header = action.payload.header
-//             state.tag = action.payload.tag
-//         }
-//     }
-// })
 
 
 // export const {navigateToFeed} = currentFeed.actions

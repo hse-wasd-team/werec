@@ -3,7 +3,8 @@ import { useAppSelector, useAppDispatch } from "../../globalState/hooks";
 import { addFeed, editFeed } from "../../globalState/reducerActions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Keyword } from "../interfaces/Feed";
+import Feed, { Configuration } from "../interfaces/Feed";
+import { editApiFeed, createApiFeed } from "../../globalState/api";
 
 interface ConfigurationPage {
   action: "add" | "edit";
@@ -16,26 +17,27 @@ function ConfigurationPage(props: ConfigurationPage) {
 
   const dispatch = useAppDispatch();
 
-  const [keywords, setKeywords] = useState<Keyword[]>(
-    props.action === "add" ? [] : data.keywords
+  const [configurations, setConfigurations] = useState<Configuration[]>(
+    props.action === "add" ? [] : data.configurations
   );
-  const [name, setName] = useState(props.action === "add" ? "" : data.title);
+  const [name, setName] = useState(props.action === "add" ? "" : data.name);
   const [description, setDescription] = useState(
     props.action === "add" ? "" : data.description
   );
-  const [numberOfVideosPerRequest, setNumberOfVideosPerRequest] = useState<number>(0);
-  const [selectedKeywordIndex, setSelectedKeywordIndex] = useState(0);
+  const [quantity, setQuantity] = useState<number>(0);
+  const [selectedConfigurationIndex, setSelectedConfigurationIndex] =
+    useState(0);
 
-  const [sourceLinks, setSourceLinks] = useState<string[]>([]);
-  const [sourceLink, setSourceLInk] = useState("");
-  const [keyword, setKeyword] = useState("");
+  const [sources, setSources] = useState<string[]>([]);
+  const [source, setSource] = useState("");
+  const [configuration, setConfiguration] = useState("");
   const [isOnMainPage, setIsOnMainPage] = useState(true);
 
   function togglePage() {
     setIsOnMainPage(!isOnMainPage);
   }
   function onChangeNumber(event: React.ChangeEvent<HTMLInputElement>) {
-    setNumberOfVideosPerRequest(Number(event.target.value));
+    setQuantity(Number(event.target.value));
   }
   function onChangeName(event: React.ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);
@@ -43,85 +45,130 @@ function ConfigurationPage(props: ConfigurationPage) {
   function onChangeDescription(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setDescription(event.target.value);
   }
-  function onChangeSourceLink(event: React.ChangeEvent<HTMLInputElement>) {
-    setSourceLInk(event.target.value);
+  function onChangeSource(event: React.ChangeEvent<HTMLInputElement>) {
+    setSource(event.target.value);
   }
-  function onChangeKeyword(event: React.ChangeEvent<HTMLInputElement>) {
-    setKeyword(event.target.value);
+  function onChangeConfiguration(event: React.ChangeEvent<HTMLInputElement>) {
+    setConfiguration(event.target.value);
   }
 
-  function addKeyword() {
-    const ind = keywords.length
-    if (keyword.length === 0) {
+  function addConfiguration() {
+    const ind = configurations.length;
+    if (configuration.length === 0) {
       alert("link should not be empty!");
       return;
     }
-    keywords.forEach((item) => {
-      if (item.keyword === keyword) {
+    configurations.forEach((item) => {
+      if (item.keyword === configuration) {
         alert("Don't add the same link");
         return;
       }
     });
-    if (keywords.length > 0) {
-      setKeywords(prevKeywords => [
+    if (configurations.length > 0) {
+      setConfigurations((prevKeywords) => [
         ...prevKeywords,
-        { keyword: keyword, numberOfVideosPerRequest: 0, sourceLinks: [] },
+        { keyword: configuration, quantity: 0, sources: [], mode: "new" },
       ]);
     } else {
-      setKeywords([
-        { keyword: keyword, numberOfVideosPerRequest: 0, sourceLinks: [] },
+      setConfigurations([
+        { keyword: configuration, quantity: 0, sources: [], mode: "new" },
       ]);
     }
-    setKeyword("");
-    setSelectedKeywordIndex(ind)
-    setNumberOfVideosPerRequest(0)
-    setSourceLinks([])
+    setConfiguration("");
+    setSelectedConfigurationIndex(ind);
+    setQuantity(0);
+    setSources([]);
     togglePage();
   }
 
-  function deleteKeyword(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
+  function deleteConfiguration(
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) {
     const index = Number((e.target as HTMLButtonElement).id);
-    setKeywords(prevKeywords => [...prevKeywords.slice(0, index), ...prevKeywords.slice(index + 1)]);
-  }
-  function editKeyword(keyword: Keyword, index: number) {
-    setKeywords([
-      ...keywords.slice(0, index),
-      keyword,
-      ...keywords.slice(index + 1),
+    setConfigurations((prevKeywords) => [
+      ...prevKeywords.slice(0, index),
+      ...prevKeywords.slice(index + 1),
     ]);
   }
-  function addSourceLink() {
-    if (sourceLink.length === 0) {
+  function editConfiguration(keyword: Configuration, index: number) {
+    setConfigurations([
+      ...configurations.slice(0, index),
+      keyword,
+      ...configurations.slice(index + 1),
+    ]);
+  }
+  function addSource() {
+    if (source.length === 0) {
       alert("link should not be empty!");
       return;
     }
-    if (sourceLinks.includes(sourceLink)) {
+    if (sources.includes(source)) {
       alert("Don't add the same link");
       return;
     }
 
-    if (sourceLinks.length > 0) {
-      setSourceLinks(prevLinks =>  [...prevLinks, sourceLink]);
+    if (sources.length > 0) {
+      setSources((prevLinks) => [...prevLinks, source]);
     } else {
-      setSourceLinks([sourceLink]);
+      setSources([source]);
     }
-    setSourceLInk("");
+    setSource("");
   }
 
-  function deleteSourceLink(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
+  function deleteSource(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
     const index = Number((e.target as HTMLButtonElement).id);
-    setSourceLinks([
-      ...sourceLinks.slice(0, index),
-      ...sourceLinks.slice(index + 1),
-    ]);
+    setSources([...sources.slice(0, index), ...sources.slice(index + 1)]);
+  }
+
+  function saveFeed() {
+    if (
+      name.length === 0 ||
+      description.length === 0 ||
+      configurations.length === 0
+    ) {
+      alert("Fill out all the required fields");
+      return;
+    }
+
+    if (props.action === "add") {
+      const feed: Feed = {
+        id: myFeeds.length.toString(),
+        name: name,
+        description: description,
+        configurations: configurations,
+        visiiblity: "public",
+        tags: [],
+      };
+      // dispatch(addFeed(feed));
+      createApiFeed(feed);
+  
+    } else if (props.action === "edit") {
+      const feed: Feed = {
+        id: data.id,
+        name: name,
+        description: description,
+        configurations: configurations,
+        visiiblity: "public",
+        tags: [],
+      };
+      // dispatch(editFeed(feed));
+      editApiFeed(feed);
+    }
+    navigate("/");
   }
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
   }
-    return (
-      <div>
-          <div className="container" style={{ textAlign: "center", display: isOnMainPage ? "block" : "none" }}>
+  return (
+    <div>
+      <div
+        className="container"
+        style={{
+          textAlign: "center",
+          display: isOnMainPage ? "block" : "none",
+        }}
+      >
         <h1>Configure your feed</h1>
         <div className="row">
           <div className="col">
@@ -149,51 +196,29 @@ function ConfigurationPage(props: ConfigurationPage) {
                 <label htmlFor="name" className="form-label">
                   Name
                 </label>
-                {props.action === "edit" ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    name="name"
-                    onChange={onChangeName}
-                    value={name}
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    name="name"
-                    onChange={onChangeName}
-                    value={name}
-                  />
-                )}
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  name="name"
+                  onChange={onChangeName}
+                  value={name}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="description" className="form-label">
                   Description
                 </label>
-                {props.action === "edit" ? (
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    rows={4}
-                    value={description}
-                    onChange={onChangeDescription}
-                  />
-                ) : (
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    rows={4}
-                    onChange={onChangeDescription}
-                    value={description}
-                  />
-                )}
+                <textarea
+                  className="form-control"
+                  id="description"
+                  name="description"
+                  rows={4}
+                  value={description}
+                  onChange={onChangeDescription}
+                />
               </div>
-              
+
               {/* <div className="mb-3">
                 <label htmlFor="visibility" className="form-label">
                   Visibility
@@ -208,37 +233,7 @@ function ConfigurationPage(props: ConfigurationPage) {
                 type="submit"
                 className="btn custom-button"
                 style={{ margin: "20px 0" }}
-                onClick={() => {
-                  if (
-                    name.length === 0 ||
-                    description.length === 0 ||
-                    keywords.length === 0
-                  ) {
-                    alert("Fill out all the required fields");
-                    return;
-                  }
-
-                  if (props.action === "add") {
-                    dispatch(
-                      addFeed({
-                        id: myFeeds.length,
-                        title: name,
-                        description: description,
-                        keywords: keywords,
-                      })
-                    );
-                  } else if (props.action === "edit") {
-                    dispatch(
-                      editFeed({
-                        id: data.id,
-                        title: name,
-                        description: description,
-                        keywords: keywords,
-                      })
-                    );
-                  }
-                  navigate("/");
-                }}
+                onClick={saveFeed}
               >
                 SAVE
               </button>
@@ -260,15 +255,15 @@ function ConfigurationPage(props: ConfigurationPage) {
                   className="form-control"
                   id="source"
                   name="source"
-                  value={keyword}
-                  onChange={onChangeKeyword}
+                  value={configuration}
+                  onChange={onChangeConfiguration}
                 />
               </div>
               <button
                 type="submit"
                 className="btn custom-button"
                 style={{ margin: "20px 0" }}
-                onClick={addKeyword}
+                onClick={addConfiguration}
               >
                 ADD
               </button>
@@ -278,7 +273,7 @@ function ConfigurationPage(props: ConfigurationPage) {
               style={{ textAlign: "left" }}
               onSubmit={(e) => submitHandler(e)}
             >
-              {keywords.map((item, ind) => {
+              {configurations.map((item, ind) => {
                 return (
                   <div className="mb-3 d-flex">
                     <img
@@ -287,14 +282,14 @@ function ConfigurationPage(props: ConfigurationPage) {
                       style={{ margin: "0px 10px" }}
                       alt="img"
                       id={ind + ""}
-                      onClick={(e) => deleteKeyword(e)}
+                      onClick={(e) => deleteConfiguration(e)}
                     />
                     <div
                       style={{ borderBottom: "1px solid rgb(50, 191, 243)" }}
                       onClick={() => {
-                        setSelectedKeywordIndex(ind)
-                        setNumberOfVideosPerRequest(item.numberOfVideosPerRequest)
-                        setSourceLinks(item.sourceLinks)
+                        setSelectedConfigurationIndex(ind);
+                        setQuantity(item.quantity);
+                        setSources(item.sources);
                         togglePage();
                       }}
                     >
@@ -307,32 +302,27 @@ function ConfigurationPage(props: ConfigurationPage) {
           </div>
         </div>
       </div>
-      <div className="container" style={{ textAlign: "center", display: !isOnMainPage ? "block" : "none" }}>
+      <div
+        className="container"
+        style={{
+          textAlign: "center",
+          display: !isOnMainPage ? "block" : "none",
+        }}
+      >
         <h1>Edit configuration</h1>
         <form style={{ textAlign: "left" }} onSubmit={(e) => submitHandler(e)}>
           <div className="mb-3">
             <label htmlFor="numberOfRequests" className="form-label">
               Number of requests per video
             </label>
-            {props.action === "edit" ? (
-              <input
-                type="number"
-                className="form-control"
-                id="numberOfRequests"
-                name="numberOfRequests"
-                value={numberOfVideosPerRequest}
-                onChange={onChangeNumber}
-              />
-            ) : (
-              <input
-                type="number"
-                className="form-control"
-                id="numberOfRequests"
-                name="numberOfRequests"
-                onChange={onChangeNumber}
-                value={numberOfVideosPerRequest}
-              />
-            )}
+            <input
+              type="number"
+              className="form-control"
+              id="numberOfRequests"
+              name="numberOfRequests"
+              onChange={onChangeNumber}
+              value={quantity}
+            />
           </div>
         </form>
         <h2>Add source</h2>
@@ -346,22 +336,22 @@ function ConfigurationPage(props: ConfigurationPage) {
               className="form-control"
               id="source"
               name="source"
-              value={sourceLink}
-              onChange={onChangeSourceLink}
+              value={source}
+              onChange={onChangeSource}
             />
           </div>
           <button
             type="submit"
             className="btn custom-button"
             style={{ margin: "20px 0" }}
-            onClick={addSourceLink}
+            onClick={addSource}
           >
             ADD
           </button>
         </form>
         <h2>sources</h2>
         <form style={{ textAlign: "left" }} onSubmit={(e) => submitHandler(e)}>
-          {sourceLinks.map((item, ind) => {
+          {sources.map((item, ind) => {
             return (
               <div className="mb-3 d-flex">
                 <img
@@ -370,7 +360,7 @@ function ConfigurationPage(props: ConfigurationPage) {
                   style={{ margin: "0px 10px" }}
                   alt="img"
                   id={ind + ""}
-                  onClick={(e) => deleteSourceLink(e)}
+                  onClick={(e) => deleteSource(e)}
                 />
                 <div style={{ borderBottom: "1px solid rgb(50, 191, 243)" }}>
                   {item}
@@ -383,26 +373,27 @@ function ConfigurationPage(props: ConfigurationPage) {
             className="btn custom-button"
             style={{ margin: "20px 0" }}
             onClick={() => {
-              if(numberOfVideosPerRequest === 0 || sourceLinks.length === 0 ){
-                alert("Fill out all the fields")
-                return
+              if (quantity === 0 || sources.length === 0) {
+                alert("Fill out all the fields");
+                return;
               }
-              const newKeyword: Keyword = {
-                keyword: keywords[selectedKeywordIndex].keyword,
-                numberOfVideosPerRequest: numberOfVideosPerRequest,
-                sourceLinks: sourceLinks
+              const newKeyword: Configuration = {
+                keyword: configurations[selectedConfigurationIndex].keyword,
+                quantity: quantity,
+                sources: sources,
+                mode: "new",
               };
-              
-              editKeyword(newKeyword, selectedKeywordIndex);
-              togglePage()
+
+              editConfiguration(newKeyword, selectedConfigurationIndex);
+              togglePage();
             }}
           >
             SAVE
           </button>
         </form>
       </div>
-      </div>
-    );
+    </div>
+  );
 }
 
 export default ConfigurationPage;

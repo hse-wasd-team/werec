@@ -1,21 +1,20 @@
 type Feed = {
-    id: number,
-    title: string,
+    id: string,
+    name: string,
     // author: string,
     // averageRating: number,
     // totalReviewCount: number,
     description: string,
-    // visiiblity: "public" | "private",
-    // tags: string[],
+    visiiblity: "public" | "private",
+    tags: string[],
     // isMyCard: boolean
-    // numberOfVideosPerRequest: number,
-    keywords: Keyword[],
-    // sourceLinks: string[]
+    configurations: Configuration[],
 }
-export type Keyword = {
+export type Configuration = {
+    mode: "new",
     keyword: string, 
-    numberOfVideosPerRequest: number,
-    sourceLinks: string[]
+    quantity: number,
+    sources: string[]
 }
 
 export default Feed
