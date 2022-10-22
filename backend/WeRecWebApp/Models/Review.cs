@@ -33,7 +33,7 @@ namespace WeRecWebApp.Models {
         /// </summary>
 
         [DataMember(Name="raiting")]
-        public decimal? Raiting { get; set; }
+        public int? Raiting { get; set; }
 
         /// <summary>
         /// Gets or Sets Comments

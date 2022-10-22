@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Bogus;
 using WeRecWebApp.Models;
 using WeRecWebApp.Repository;
 
@@ -24,7 +25,6 @@ namespace WeRecWebApp.Apis
     public class FeedApiController : Controller
     { 
         private readonly IFeedRepository _repo;
-
         public FeedApiController(IFeedRepository repo)
         {
             _repo = repo;
@@ -40,6 +40,11 @@ namespace WeRecWebApp.Apis
         [HttpPost]
         public async Task<IActionResult> AddFeed([FromBody] PostFeedModel feed)
         {
+            var faker = new Faker<Review>()
+                .RuleFor(o => o.Comments, f => f.Make(50, () => f.Lorem.Sentence()).ToList())
+                .RuleFor(o => o.Id, f => f.Random.Guid().ToString())
+                .RuleFor(o => o.Raiting, f => f.Random.Int(1, 5));
+                
             feed.Configurations.ForEach(c => c.Id = Guid.NewGuid().ToString());
 
             var newFeed = new Feed
@@ -51,7 +56,8 @@ namespace WeRecWebApp.Apis
                 CreatorName = "test",
                 Tags = feed.Tags,
                 Visibility = feed.Visibility,
-                Configurations = feed.Configurations
+                Configurations = feed.Configurations,
+                Review = faker.Generate(1).Single()
             };
 
             try

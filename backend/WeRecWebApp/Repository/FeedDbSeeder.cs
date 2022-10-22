@@ -60,20 +60,20 @@ namespace WeRecWebApp.Repository
                 .RuleFor(o => o.Review, f => new Review
                 {
                     Id = f.Random.Guid().ToString(),
-                    Raiting = f.Random.Decimal(0, 10),
-                    Comments = f.Make(50, () => f.Lorem.Sentence()).ToList()
+                    Raiting = f.Random.Int(1, 5),
+                    Comments = f.Make(f.Random.Int(1, 10), () => f.Lorem.Sentence()).ToList()
                 })
                 .RuleFor(o => o.Tags, f => f.Lorem.Words().ToList())
                 .RuleFor(o => o.Visibility, f => VisibilityEnum.PublicEnum)
                 .RuleFor(o => o.CreatorId, f => f.Random.Guid().ToString())
                 .RuleFor(o => o.CreatorName, f => f.Person.FullName)
-                .RuleFor(o => o.Configurations, f => f.Make(10, () => new FeedConfiguration
+                .RuleFor(o => o.Configurations, f => f.Make(f.Random.Int(1, 10), () => new FeedConfiguration
                 {
                     Id = f.Random.Guid().ToString(),
                     Keyword = f.Lorem.Word(),
                     Quantity = f.Random.Int(1, 20),
                     Mode = FeedConfiguration.ModeEnum.NewEnum,
-                    Sources = f.Make(20, () => f.Internet.Url()).ToList(),
+                    Sources = f.Make(f.Random.Int(1, 10), () => f.Internet.Url()).ToList(),
                 }).ToList());
 
             return faker.Generate(100);
