@@ -12,16 +12,28 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using WeRecWebApp.Repository;
+using WeRecWebApp.Services;
 
 
 namespace WeRecWebApp.Apis
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     [Route("api/v1/videos")]
     public class VideoApiController : Controller
-    { 
+    {
+        private readonly IFeedRepository _repo;
+        private readonly YTVideoService _videoService;
+        public VideoApiController(IFeedRepository repo, YTVideoService videoService)
+        {
+            _repo = repo;
+            _videoService = videoService;
+        }
+
         /// <summary>
         /// Get videos
         /// </summary>
@@ -32,23 +44,13 @@ namespace WeRecWebApp.Apis
         /// <response code="400">Invalid feed id or keyword supplied</response>
         /// <response code="404">Feed or keyword not found</response>
         [HttpGet("{feedId}/{keyword}/")]
-        public virtual IActionResult GetVideosByFeedId([FromRoute][Required]string feedId, [FromRoute][Required]string keyword)
-        { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<string>));
+        public async Task<IActionResult> GetVideosByFeedId([FromRoute] [Required] string feedId, [FromRoute] [Required] string keyword)
+        {
+            var feed = await _repo.GetFeed(feedId);
+            if (feed == null) return NotFound();
 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
-
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "[ \"https://www.youtube.com/watch?v=o1YenjwOp-A\", \"https://www.youtube.com/watch?v=cjO_yorTfP8\" ]";
-            
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<List<string>>(exampleJson)
-                        : default(List<string>);            //TODO: Change the data returned
-            return new JsonResult(example);
+            var videos = _videoService.GetVideos(feed, keyword);
+            return Ok(videos);
         }
     }
 }

@@ -40,33 +40,15 @@ namespace WeRecWebApp.Models {
         /// </summary>
 
         [DataMember(Name="quantity")]
-        public int? Quantity { get; set; }
-
-        /// <summary>
-        /// Mode
-        /// </summary>
-        /// <value>Mode</value>
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public enum ModeEnum
-        {
-            /// <summary>
-            /// Enum NewEnum for new
-            /// </summary>
-            [EnumMember(Value = "new")]
-            NewEnum = 0,
-            /// <summary>
-            /// Enum RandomEnum for random
-            /// </summary>
-            [EnumMember(Value = "random")]
-            RandomEnum = 1        }
-
+        public int Quantity { get; set; }
+        
         /// <summary>
         /// Mode
         /// </summary>
         /// <value>Mode</value>
 
         [DataMember(Name="mode")]
-        public ModeEnum? Mode { get; set; }
+        public VideoMode Mode { get; set; }
 
         /// <summary>
         /// Gets or Sets Sources

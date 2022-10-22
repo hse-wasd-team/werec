@@ -127,10 +127,12 @@ namespace WeRecWebApp.Apis
             var existingFeed = await _repo.GetFeed(feedId);
             if (existingFeed == null) return NotFound();
 
-            existingFeed.Configurations = feed.Configurations.Any() ? feed.Configurations : existingFeed.Configurations;
+            existingFeed.Configurations = feed.Configurations != null && feed.Configurations.Any()
+                ? feed.Configurations
+                : existingFeed.Configurations;
             existingFeed.Description = !string.IsNullOrEmpty(feed.Description) ? feed.Description : existingFeed.Description;
             existingFeed.Name = !string.IsNullOrEmpty(feed.Name) ? feed.Name : existingFeed.Name;
-            existingFeed.Tags = feed.Tags.Any() ? feed.Tags : existingFeed.Tags;
+            existingFeed.Tags = feed.Tags != null && feed.Tags.Any() ? feed.Tags : existingFeed.Tags;
             existingFeed.Visibility = feed.Visibility ?? existingFeed.Visibility;
             var result = await _repo.UpdateFeed(existingFeed);
             if (!result) return BadRequest();

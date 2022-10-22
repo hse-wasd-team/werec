@@ -72,8 +72,8 @@ namespace WeRecWebApp.Repository
                     Id = f.Random.Guid().ToString(),
                     Keyword = f.Lorem.Word(),
                     Quantity = f.Random.Int(1, 20),
-                    Mode = FeedConfiguration.ModeEnum.NewEnum,
-                    Sources = f.Make(f.Random.Int(1, 10), () => f.Internet.Url()).ToList(),
+                    Mode = f.PickRandom<VideoMode>(),
+                    Sources = f.Make(f.Random.Int(1, 10), () => f.Random.Uuid().ToString()).ToList(),
                 }).ToList());
 
             return faker.Generate(100);

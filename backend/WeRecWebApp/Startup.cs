@@ -6,7 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using WeRecWebApp.Models;
 using WeRecWebApp.Repository;
+using WeRecWebApp.Services;
 
 namespace WeRecWebApp
 {
@@ -27,6 +29,8 @@ namespace WeRecWebApp
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<FeedDbContext>(options =>
                     options.UseNpgsql(Configuration["Data:DbContext:ConnectionString"]));
+            
+            services.Configure<YouTubeSettings>(Configuration.GetSection(nameof(YouTubeSettings)));
 
             services.AddControllers();
 
@@ -35,7 +39,7 @@ namespace WeRecWebApp
 
             //Transient: Created each time they're needed
             services.AddTransient<FeedDbSeeder>();
-
+            services.AddTransient<YTVideoService>();
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("1.0.3", new OpenApiInfo
