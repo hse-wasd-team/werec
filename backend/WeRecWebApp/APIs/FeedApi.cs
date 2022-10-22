@@ -41,7 +41,7 @@ namespace WeRecWebApp.Apis
         public async Task<IActionResult> AddFeed([FromBody] PostFeedModel feed)
         {
             var faker = new Faker<Review>()
-                .RuleFor(o => o.Comments, f => f.Make(50, () => f.Lorem.Sentence()).ToList())
+                .RuleFor(o => o.Comments, f => f.Make(f.Random.Int(1, 10), () => f.Lorem.Sentence()).ToList())
                 .RuleFor(o => o.Id, f => f.Random.Guid().ToString())
                 .RuleFor(o => o.Raiting, f => f.Random.Int(1, 5));
                 
