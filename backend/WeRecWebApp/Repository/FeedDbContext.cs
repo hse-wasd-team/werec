@@ -8,6 +8,7 @@ namespace WeRecWebApp.Repository
         public DbSet<Feed> Feeds { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<FeedConfiguration> Configurations { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
         public FeedDbContext (DbContextOptions<FeedDbContext> options) : base(options) { }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WeRecWebApp.Models;
 
 namespace WeRecWebApp.Services
@@ -16,7 +17,9 @@ namespace WeRecWebApp.Services
 
         private readonly Dictionary<VideoMode, Func<Feed, string, Task<List<string>>>> videoModesProcessors;
 
-        public YTVideoService(IOptions<YouTubeSettings> youTubeSettings)
+        private readonly ILogger _logger;
+
+        public YTVideoService(IOptions<YouTubeSettings> youTubeSettings, ILoggerFactory loggerFactory)
         {
             service = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -26,17 +29,19 @@ namespace WeRecWebApp.Services
 
             videoModesProcessors = new Dictionary<VideoMode, Func<Feed, string, Task<List<string>>>>
             {
-                [VideoMode.AllFresh] = GetAllFreshVideos,
-                //[VideoMode.AllRandom] = GetAllRandomVideos,
-                //[VideoMode.EachFresh] = GetEachFreshVideos,
-                //[VideoMode.EachRandom] = GetEachRandomVideos
+                [VideoMode.AllFresh] = GetAllRandomVideos, // GetAllFreshVideos,
+                [VideoMode.AllRandom] = GetAllRandomVideos, //GetAllRandomVideos,
+                [VideoMode.EachFresh] = GetAllRandomVideos, //GetEachFreshVideos,
+                [VideoMode.EachRandom] = GetAllRandomVideos, //GetEachRandomVideos
             };
+
+            _logger = loggerFactory.CreateLogger("VideoService");
         }
 
         public async Task<IEnumerable<string>> GetVideos(Feed feed, string keyWord)
         {
             var config = feed.Configurations.Single(c => c.Keyword == keyWord);
-
+            
             var func = videoModesProcessors[config.Mode];
 
             var videoIds = await func(feed, keyWord);
@@ -46,24 +51,27 @@ namespace WeRecWebApp.Services
 
         private string FormProperLink(string link) =>
             string.Format("https://www.youtube.com/watch?v={0}", link);
-        private async Task<List<string>> GetAllFreshVideos(Feed feed, string keyWord)
+        private async Task<List<string>> GetAllRandomVideos(Feed feed, string keyWord)
         {
             var config = feed.Configurations.Single(c => c.Keyword == keyWord);
 
             var searchListRequest = service.Search.List("snippet");
             List<SearchResult> results = new List<SearchResult>();
+            var random = new Random();
 
-            foreach (var id in config.Sources)
+            foreach (var source in config.Sources)
             {
-                searchListRequest.ChannelId = id;
-                searchListRequest.MaxResults = config.Quantity;
-                searchListRequest.Order = SearchResource.ListRequest.OrderEnum.Date;
+                searchListRequest.ChannelId = source;
+                searchListRequest.MaxResults = random.Next(config.Quantity, config.Quantity + 30);
 
-                var result = await searchListRequest.ExecuteAsync();
-                results.AddRange(result.Items);
+                Array values = Enum.GetValues(typeof(SearchResource.ListRequest.OrderEnum));
+                var order = (SearchResource.ListRequest.OrderEnum) values.GetValue(random.Next(values.Length));
+
+                searchListRequest.Order = order;
+
+                results.AddRange((await searchListRequest.ExecuteAsync()).Items);
             }
 
-            var random = new Random();
             var links = new List<string>();
             HashSet<int> numbers = new HashSet<int>();
             while (numbers.Count < config.Quantity)
