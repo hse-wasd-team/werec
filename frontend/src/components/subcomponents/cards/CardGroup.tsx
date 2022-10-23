@@ -57,6 +57,7 @@ function CardGroup(props: CardGroup) {
               configurations={el.configurations}
               visiiblity={el.visiiblity}
               tags={el.tags}
+              raiting={el.raiting}
             />
           );
         })}

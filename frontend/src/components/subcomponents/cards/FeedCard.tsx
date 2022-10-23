@@ -25,8 +25,9 @@ function FeedCard(props: Feed) {
               // totalReviewCount: props.totalReviewCount,
               description: props.description,
               configurations: props.configurations,
-              visiiblity: "public",
-              tags: []
+              visiiblity: props.visiiblity,
+              tags: props.tags,
+              raiting: props.raiting,
             })
           )
         }
@@ -49,23 +50,23 @@ function FeedCard(props: Feed) {
             <h5
               className="card-title"
               style={{
-                // height: "2rem",
                 fontSize: "1rem",
                 flexGrow: "12",
               }}
             >
               {props.name}
             </h5>
-            {/* <div className="scrollable">
+            <div className="descriptionOnCard">{props.description}</div>
+            <div className="scrollable">
               {props.tags.map((tag, index) => {
                 return <Tag text={tag} key={index} />;
               })}
             </div>
 
             <Rating
-              averageRating={props.averageRating ?? 0}
-              totalReviewCount={props.totalReviewCount ?? 0}
-            /> */}
+              averageRating={props.raiting.raiting / 2 ?? 0}
+              totalReviewCount={props.raiting.comments.length ?? 0}
+            />
           </div>
         </div>
       </Link>

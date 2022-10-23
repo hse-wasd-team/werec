@@ -1,7 +1,5 @@
 import * as React from "react";
 
-
-
 interface Rating {
   averageRating: number;
   totalReviewCount: number;
@@ -21,7 +19,7 @@ function Rating({ averageRating, totalReviewCount }: Rating) {
       <span>/5</span>
       <div className="stars">
         {counter.map(() => {
-          return <i className="fa fa-star"></i>;
+          return <i className="fa fa-star" style={{ color: "orange" }}></i>;
         })}
       </div>
 

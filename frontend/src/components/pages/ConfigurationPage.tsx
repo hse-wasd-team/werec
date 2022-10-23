@@ -138,10 +138,10 @@ function ConfigurationPage(props: ConfigurationPage) {
         configurations: configurations,
         visiiblity: "public",
         tags: [],
+        raiting: { raiting: 0, comments: [] },
       };
       // dispatch(addFeed(feed));
       createApiFeed(feed);
-  
     } else if (props.action === "edit") {
       const feed: Feed = {
         id: data.id,
@@ -150,6 +150,7 @@ function ConfigurationPage(props: ConfigurationPage) {
         configurations: configurations,
         visiiblity: "public",
         tags: [],
+        raiting: { raiting: 0, comments: [] },
       };
       // dispatch(editFeed(feed));
       editApiFeed(feed);
