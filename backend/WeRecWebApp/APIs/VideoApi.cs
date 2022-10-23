@@ -49,7 +49,7 @@ namespace WeRecWebApp.Apis
             var feed = await _repo.GetFeed(feedId);
             if (feed == null) return NotFound();
 
-            var videos = _videoService.GetVideos(feed, keyword);
+            var videos = await _videoService.GetVideos(feed, keyword);
             return Ok(videos);
         }
     }

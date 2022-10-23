@@ -32,11 +32,13 @@ namespace WeRecWebApp
             
             services.Configure<YouTubeSettings>(Configuration.GetSection(nameof(YouTubeSettings)));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             // Add our PostgreSQL Repositories (scoped to each request)
             services.AddScoped<IFeedRepository, FeedRepository>();
-
+            services.AddScoped<ISubRepository, SubRepository>();
             //Transient: Created each time they're needed
             services.AddTransient<FeedDbSeeder>();
             services.AddTransient<YTVideoService>();

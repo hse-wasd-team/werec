@@ -16,7 +16,7 @@ namespace WeRecWebApp.Repository
         public FeedRepository(FeedDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
-            _logger = loggerFactory.CreateLogger("CustomersRepository");
+            _logger = loggerFactory.CreateLogger("FeedRepository");
         }
 
         public async Task<List<Feed>> GetFeeds()

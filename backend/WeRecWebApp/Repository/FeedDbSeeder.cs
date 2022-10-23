@@ -53,6 +53,11 @@ namespace WeRecWebApp.Repository
 
         private List<Feed> GetFeeds()
         {
+            var channelsIds = new List<string>()
+            {
+                "UC1oHb5i_2GsyefbSPjW-SMQ", "UCSzHO_V894KyTDw3UgZS7gg", "UC8P4HIRzjjnxU-MQX0QHLUw", "UCCb6W2FU1L7j9mw14YK-9yg"
+            };
+            
             var faker = new Faker<Feed>("en")
                 .RuleFor(o => o.Id, f => f.Random.Guid().ToString())
                 .RuleFor(o => o.Description, f => f.Lorem.Sentence())
@@ -73,7 +78,8 @@ namespace WeRecWebApp.Repository
                     Keyword = f.Lorem.Word(),
                     Quantity = f.Random.Int(1, 20),
                     Mode = f.PickRandom<VideoMode>(),
-                    Sources = f.Make(f.Random.Int(1, 10), () => f.Random.Uuid().ToString()).ToList(),
+                    //Sources = f.PickRandom(channelsIds, f.Random.Int(1, 10)).ToList(),
+                    Sources = channelsIds
                 }).ToList());
 
             return faker.Generate(100);
