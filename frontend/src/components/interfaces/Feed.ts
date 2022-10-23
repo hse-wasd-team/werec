@@ -1,23 +1,25 @@
 type Feed = {
   id: string;
   name: string;
-  // author: string,
+  creatorName: string;
+  creatorId: string;
   // averageRating: number,
   // totalReviewCount: number,
   description: string;
-  visiiblity: "public" | "private";
+  visibility: "public" | "private" | number;
   tags: string[];
   // isMyCard: boolean
   configurations: Configuration[];
-  raiting: Raiting;
+  review: Review;
 };
 export type Configuration = {
-  mode: "new";
+  id: string;
+  mode: string | number;
   keyword: string;
   quantity: number;
   sources: string[];
 };
-export type Raiting = {
+export type Review = {
   raiting: number;
   comments: string[];
 };

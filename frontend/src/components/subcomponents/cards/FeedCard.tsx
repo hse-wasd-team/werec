@@ -25,9 +25,11 @@ function FeedCard(props: Feed) {
               // totalReviewCount: props.totalReviewCount,
               description: props.description,
               configurations: props.configurations,
-              visiiblity: props.visiiblity,
+              visibility: props.visibility,
               tags: props.tags,
-              raiting: props.raiting,
+              review: props.review,
+              creatorName: props.creatorName,
+              creatorId: props.creatorId,
             })
           )
         }
@@ -43,10 +45,10 @@ function FeedCard(props: Feed) {
           }}
         >
           <div className="card-body" style={{ whiteSpace: "normal" }}>
-            {/* <div className="d-flex justify-content-between">
-              <div style={{ color: "grey" }}>{props.author}</div>
-              {props.isMyCard && <div style={{ color: "grey" }}>{props.visiiblity}</div>}
-            </div> */}
+            <div className="d-flex justify-content-between">
+              <div style={{ color: "grey" }}>{props.creatorName}</div>
+              {/* {props.isMyCard && <div style={{ color: "grey" }}>{props.visiiblity}</div>} */}
+            </div>
             <h5
               className="card-title"
               style={{
@@ -64,8 +66,8 @@ function FeedCard(props: Feed) {
             </div>
 
             <Rating
-              averageRating={props.raiting.raiting / 2 ?? 0}
-              totalReviewCount={props.raiting.comments.length ?? 0}
+              averageRating={props.review.raiting / 2 ?? 0}
+              totalReviewCount={props.review.comments.length ?? 0}
             />
           </div>
         </div>

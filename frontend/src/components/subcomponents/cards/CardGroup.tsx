@@ -16,31 +16,13 @@ function CardGroup(props: CardGroup) {
   const [feeds, setFeeds] = useState<Feed[]>([]);
 
   useEffect(() => {
-    fetch("/api/v1/feed")
+    fetch("/api/v1/feeds")
       .then((response) => response.json())
       .then((responseFeeds) => {
         setFeeds(responseFeeds);
       });
-  }, []);
+  });
 
-  // const response = useGetAllFeedsQuery(0);
-  // response.refetch()
-
-  // if (response.isSuccess) {
-  // const responseFeeds = response.data;
-  // for (let i = 0; i < responseFeeds.length; i++) {
-  //   const element = responseFeeds[i];
-
-  //   feeds.push({
-  //     id: element.id,
-  //     name: element.name,
-  //     description: element.description,
-  //     visiiblity: element.visiiblity,
-  //     tags: element.tags,
-  //     configurations: element.configurations
-  //   });
-  // }
-  // }
   return (
     <div className="container">
       <div
@@ -55,9 +37,11 @@ function CardGroup(props: CardGroup) {
               name={el.name}
               description={el.description}
               configurations={el.configurations}
-              visiiblity={el.visiiblity}
+              visibility={el.visibility}
               tags={el.tags}
-              raiting={el.raiting}
+              review={el.review}
+              creatorName={el.creatorName}
+              creatorId={el.creatorId}
             />
           );
         })}
@@ -66,7 +50,7 @@ function CardGroup(props: CardGroup) {
         <button
           className="custom-round-button"
           style={{
-            position: "absolute",
+            position: "fixed",
             bottom: "80px",
             right: "3vw",
             zIndex: "7",

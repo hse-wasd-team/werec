@@ -19,19 +19,19 @@ function DetailedPage() {
       })}
       <div style={{ margin: "30px" }}>
         <Rating
-          averageRating={props.raiting.raiting / 2 ?? 0}
-          totalReviewCount={props.raiting.comments.length ?? 0}
+          averageRating={props.review.raiting / 2 ?? 0}
+          totalReviewCount={props.review.comments.length ?? 0}
         />
       </div>
 
       <div className="d-flex justify-content-center">
-        <button
+        {/* <button
           type="button"
           className="btn custom-button"
           style={{ margin: "20px 30px" }}
         >
           GET BOT
-        </button>
+        </button> */}
         <Link to="/">
           <button
             type="button"

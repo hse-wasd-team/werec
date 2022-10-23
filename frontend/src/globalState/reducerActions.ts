@@ -24,13 +24,15 @@ const currentTabItem = createSlice({
 });
 
 var initialState: Feed = {
-  id: "0",
   name: "title",
   description: "",
   configurations: [],
-  visiiblity: "public",
+  visibility: "public",
   tags: [],
-  raiting: { raiting: 0, comments: [] },
+  review: { raiting: 0, comments: [] },
+  id: "",
+  creatorName: "",
+  creatorId: "",
 };
 
 const currentDetailedPage = createSlice({
@@ -40,6 +42,8 @@ const currentDetailedPage = createSlice({
     navigateToDetailedPage(state, action: PayloadAction<Feed>) {
       state.id = action.payload.id;
       state.name = action.payload.name;
+      state.creatorName = action.payload.creatorName;
+      state.creatorId = action.payload.creatorId;
       // state.author = action.payload.author
       // state.averageRating = action.payload.averageRating
       // state.totalReviewCount = action.payload.totalReviewCount
@@ -47,8 +51,8 @@ const currentDetailedPage = createSlice({
       state.configurations = action.payload.configurations;
 
       state.tags = action.payload.tags;
-      state.visiiblity = action.payload.visiiblity;
-      state.raiting = action.payload.raiting;
+      state.visibility = action.payload.visibility;
+      state.review = action.payload.review;
       // state.isMyCard = action.payload.isMyCard
     },
   },
@@ -69,8 +73,8 @@ const myFeeds = createSlice({
       state[ind].name = action.payload.name;
       state[ind].id = action.payload.id;
       state[ind].tags = action.payload.tags;
-      state[ind].visiiblity = action.payload.visiiblity;
-      state[ind].raiting = action.payload.raiting;
+      state[ind].visibility = action.payload.visibility;
+      state[ind].review = action.payload.review;
     },
     deleteFeed(state, action: PayloadAction<string>) {
       const ind = state.findIndex((feed) => feed.id === action.payload);

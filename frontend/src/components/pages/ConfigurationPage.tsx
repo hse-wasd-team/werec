@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "../../globalState/hooks";
-import { addFeed, editFeed } from "../../globalState/reducerActions";
-import { useState } from "react";
+import { useState, useId } from "react";
 import { useNavigate } from "react-router-dom";
 import Feed, { Configuration } from "../interfaces/Feed";
 import { editApiFeed, createApiFeed } from "../../globalState/api";
+import { TagsInput } from "react-tag-input-component";
 
 interface ConfigurationPage {
   action: "add" | "edit";
@@ -14,6 +14,7 @@ function ConfigurationPage(props: ConfigurationPage) {
   const data = useAppSelector((state) => state.currentDetailedPage);
   const myFeeds = useAppSelector((state) => state.myFeeds);
   const navigate = useNavigate();
+  const id = useId();
 
   const dispatch = useAppDispatch();
 
@@ -32,6 +33,9 @@ function ConfigurationPage(props: ConfigurationPage) {
   const [source, setSource] = useState("");
   const [configuration, setConfiguration] = useState("");
   const [isOnMainPage, setIsOnMainPage] = useState(true);
+  const [tags, setTags] = useState<string[]>(
+    props.action === "add" ? [] : data.tags
+  );
 
   function togglePage() {
     setIsOnMainPage(!isOnMainPage);
@@ -67,11 +71,11 @@ function ConfigurationPage(props: ConfigurationPage) {
     if (configurations.length > 0) {
       setConfigurations((prevKeywords) => [
         ...prevKeywords,
-        { keyword: configuration, quantity: 0, sources: [], mode: "new" },
+        { keyword: configuration, quantity: 0, sources: [], mode: 0, id: "" },
       ]);
     } else {
       setConfigurations([
-        { keyword: configuration, quantity: 0, sources: [], mode: "new" },
+        { keyword: configuration, quantity: 0, sources: [], mode: 0, id: "" },
       ]);
     }
     setConfiguration("");
@@ -124,7 +128,8 @@ function ConfigurationPage(props: ConfigurationPage) {
     if (
       name.length === 0 ||
       description.length === 0 ||
-      configurations.length === 0
+      configurations.length === 0 ||
+      tags.length === 0
     ) {
       alert("Fill out all the required fields");
       return;
@@ -136,9 +141,11 @@ function ConfigurationPage(props: ConfigurationPage) {
         name: name,
         description: description,
         configurations: configurations,
-        visiiblity: "public",
-        tags: [],
-        raiting: { raiting: 0, comments: [] },
+        visibility: 0,
+        tags: tags,
+        review: { raiting: 0, comments: [] },
+        creatorName: "",
+        creatorId: "",
       };
       // dispatch(addFeed(feed));
       createApiFeed(feed);
@@ -148,9 +155,11 @@ function ConfigurationPage(props: ConfigurationPage) {
         name: name,
         description: description,
         configurations: configurations,
-        visiiblity: "public",
-        tags: [],
-        raiting: { raiting: 0, comments: [] },
+        visibility: 0,
+        tags: tags,
+        review: { raiting: 0, comments: [] },
+        creatorName: data.creatorName,
+        creatorId: data.creatorId,
       };
       // dispatch(editFeed(feed));
       editApiFeed(feed);
@@ -219,6 +228,12 @@ function ConfigurationPage(props: ConfigurationPage) {
                   onChange={onChangeDescription}
                 />
               </div>
+              <TagsInput
+                value={tags}
+                onChange={setTags}
+                name="tags"
+                placeHolder="enter tags"
+              />
 
               {/* <div className="mb-3">
                 <label htmlFor="visibility" className="form-label">
@@ -382,7 +397,8 @@ function ConfigurationPage(props: ConfigurationPage) {
                 keyword: configurations[selectedConfigurationIndex].keyword,
                 quantity: quantity,
                 sources: sources,
-                mode: "new",
+                mode: 0,
+                id: id,
               };
 
               editConfiguration(newKeyword, selectedConfigurationIndex);
