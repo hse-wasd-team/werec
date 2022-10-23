@@ -97,7 +97,7 @@ namespace WeRecWebApp
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            // Visit http://localhost:5000/swagger
+            // Visit http://localhost:8080/swagger
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/1.0.3/swagger.json", "Swagger WeRec - OpenAPI 3.0");
