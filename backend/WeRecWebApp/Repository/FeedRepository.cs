@@ -30,7 +30,6 @@ namespace WeRecWebApp.Repository
         public async Task<Feed> GetFeed(string id)
         {
             return await _context.Feeds
-                .AsNoTracking()
                 .Include(f => f.Configurations)
                 .Include(f => f.Review)
                 .SingleOrDefaultAsync(f => f.Id == id);

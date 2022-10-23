@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
+using Microsoft.Extensions.Logging;
 using WeRecWebApp.Models;
 using WeRecWebApp.Repository;
 
@@ -25,9 +26,11 @@ namespace WeRecWebApp.Apis
     public class FeedApiController : Controller
     { 
         private readonly IFeedRepository _repo;
-        public FeedApiController(IFeedRepository repo)
+        private readonly ILogger _logger;
+        public FeedApiController(IFeedRepository repo, ILoggerFactory loggerFactory)
         {
             _repo = repo;
+            _logger = loggerFactory.CreateLogger("FeedRepository");
         }
 
         /// <summary>
@@ -126,7 +129,7 @@ namespace WeRecWebApp.Apis
         {
             var existingFeed = await _repo.GetFeed(feedId);
             if (existingFeed == null) return NotFound();
-
+            feed.Configurations.ForEach(f => f.Id = Guid.NewGuid().ToString());
             existingFeed.Configurations = feed.Configurations != null && feed.Configurations.Any()
                 ? feed.Configurations
                 : existingFeed.Configurations;
