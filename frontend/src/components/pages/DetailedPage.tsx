@@ -19,7 +19,7 @@ function DetailedPage() {
       })}
       <div style={{ margin: "30px" }}>
         <Rating
-          averageRating={props.review.raiting / 2 ?? 0}
+          averageRating={props.review.raiting ?? 0}
           totalReviewCount={props.review.comments.length ?? 0}
         />
       </div>
