@@ -3,8 +3,13 @@ import { useAppSelector, useAppDispatch } from "../../globalState/hooks";
 import { useState, useId } from "react";
 import { useNavigate } from "react-router-dom";
 import Feed, { Configuration } from "../interfaces/Feed";
-import { editApiFeed, createApiFeed } from "../../globalState/api";
+// import { editApiFeed, createApiFeed } from "../../globalState/api";
 import { TagsInput } from "react-tag-input-component";
+import {
+  editApiFeed,
+  createApiFeed,
+  getAllApiFeeds,
+} from "../../globalState/reducerActions";
 
 interface ConfigurationPage {
   action: "add" | "edit";
@@ -137,7 +142,7 @@ function ConfigurationPage(props: ConfigurationPage) {
 
     if (props.action === "add") {
       const feed: Feed = {
-        id: myFeeds.length.toString(),
+        id: "",
         name: name,
         description: description,
         configurations: configurations,
@@ -147,8 +152,9 @@ function ConfigurationPage(props: ConfigurationPage) {
         creatorName: "",
         creatorId: "",
       };
-      // dispatch(addFeed(feed));
-      createApiFeed(feed);
+      dispatch(createApiFeed(feed));
+      dispatch(getAllApiFeeds());
+      // createApiFeed(feed);
     } else if (props.action === "edit") {
       const feed: Feed = {
         id: data.id,
@@ -158,11 +164,12 @@ function ConfigurationPage(props: ConfigurationPage) {
         visibility: 0,
         tags: tags,
         review: { raiting: 0, comments: [] },
-        creatorName: data.creatorName,
-        creatorId: data.creatorId,
+        creatorName: "",
+        creatorId: "",
       };
-      // dispatch(editFeed(feed));
-      editApiFeed(feed);
+      dispatch(editApiFeed(feed));
+      dispatch(getAllApiFeeds());
+      // editApiFeed(feed);
     }
     navigate("/");
   }

@@ -3,36 +3,41 @@ import Rating from "./Rating";
 import Feed from "../../interfaces/Feed";
 import { navigateToDetailedPage } from "../../../globalState/reducerActions";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../../globalState/hooks";
+import { useAppDispatch, useAppSelector } from "../../../globalState/hooks";
 import Tag from "../Tag";
+import { selectFeedById } from "../../../globalState/reducerActions";
 
-function FeedCard(props: Feed) {
+interface FeedCardProps {
+  id: string;
+}
+
+function FeedCard(props: FeedCardProps) {
   const dispatch = useAppDispatch();
+  const feed = useAppSelector((state) => selectFeedById(state, props.id));
+
   return (
     <div
       className="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-xs-12"
       style={{ marginLeft: "1vw", marginRight: "1vw" }}
     >
       <Link
-        to={`/feed/${props.id}`}
-        onClick={() =>
-          dispatch(
-            navigateToDetailedPage({
-              id: props.id,
-              name: props.name,
-              // author: props.author,
-              // averageRating: props.averageRating,
-              // totalReviewCount: props.totalReviewCount,
-              description: props.description,
-              configurations: props.configurations,
-              visibility: props.visibility,
-              tags: props.tags,
-              review: props.review,
-              creatorName: props.creatorName,
-              creatorId: props.creatorId,
-            })
-          )
-        }
+        to={`/feed/${feed?.id}`}
+        onClick={() => {
+          if (typeof feed !== "undefined")
+            dispatch(
+              navigateToDetailedPage({
+                id: feed.id,
+                name: feed.name,
+                description: feed.description,
+                configurations: feed.configurations,
+                visibility: feed.visibility,
+                tags: feed.tags,
+                review: feed.review,
+                creatorName: feed.creatorName,
+                creatorId: feed.creatorId,
+              })
+            );
+        }}
       >
         <div
           className="card custom-card"
@@ -46,7 +51,9 @@ function FeedCard(props: Feed) {
         >
           <div className="card-body" style={{ whiteSpace: "normal" }}>
             <div className="d-flex justify-content-between">
-              <div style={{ color: "grey" }}>{props.creatorName}</div>
+              <div style={{ color: "grey" }}>
+                {feed ? feed?.creatorName : ""}
+              </div>
               {/* {props.isMyCard && <div style={{ color: "grey" }}>{props.visiiblity}</div>} */}
             </div>
             <h5
@@ -56,18 +63,20 @@ function FeedCard(props: Feed) {
                 flexGrow: "12",
               }}
             >
-              {props.name}
+              {feed?.name}
             </h5>
-            <div className="descriptionOnCard">{props.description}</div>
+            <div className="descriptionOnCard">
+              {feed ? feed?.description : ""}
+            </div>
             <div className="scrollable">
-              {props.tags.map((tag, index) => {
+              {feed?.tags.map((tag, index) => {
                 return <Tag text={tag} key={index} />;
               })}
             </div>
 
             <Rating
-              averageRating={props.review.raiting ?? 0}
-              totalReviewCount={props.review.comments.length ?? 0}
+              averageRating={feed?.review.raiting ?? 0}
+              totalReviewCount={feed?.review.comments.length ?? 0}
             />
           </div>
         </div>

@@ -2,9 +2,12 @@ import * as React from "react";
 import Tag from "../subcomponents/Tag";
 import Rating from "../subcomponents/cards/Rating";
 import { useAppSelector, useAppDispatch } from "../../globalState/hooks";
-import { deleteFeed } from "../../globalState/reducerActions";
 import { Link } from "react-router-dom";
-import { deleteApiFeed } from "../../globalState/api";
+// import { deleteApiFeed } from "../../globalState/api";
+import {
+  deleteApiFeed,
+  getAllApiFeeds,
+} from "../../globalState/reducerActions";
 
 function DetailedPage() {
   const props = useAppSelector((state) => state.currentDetailedPage);
@@ -38,8 +41,9 @@ function DetailedPage() {
             className="btn custom-button"
             style={{ margin: "20px 30px" }}
             onClick={() => {
-              // dispatch(deleteFeed(props.id))
-              deleteApiFeed(props.id);
+              dispatch(deleteApiFeed(props.id));
+              // dispatch(getAllApiFeeds());
+              // deleteApiFeed(props.id);
             }}
           >
             DELETE

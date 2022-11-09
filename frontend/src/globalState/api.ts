@@ -27,7 +27,6 @@ export async function getApiFeeds() {
 
   const result = await response.json();
   return result;
-  // return response.json()
 }
 
 export async function createApiFeed(feed: Feed) {
