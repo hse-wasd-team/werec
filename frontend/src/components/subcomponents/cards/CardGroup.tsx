@@ -4,11 +4,9 @@ import { useState, useEffect } from "react";
 import Feed from "../../interfaces/Feed";
 import { useAppSelector, useAppDispatch } from "../../../globalState/hooks";
 import { Link } from "react-router-dom";
-import { useGetAllFeedsQuery, getApiFeeds } from "../../../globalState/api";
 import {
   getAllApiFeeds,
   selectFeedIds,
-  selectAllFeeds,
 } from "../../../globalState/reducerActions";
 
 interface CardGroup {
@@ -32,9 +30,7 @@ function CardGroup(props: CardGroup) {
   useEffect(() => {
     dispatch(getAllApiFeeds());
   }, []);
-  // if (status === "pending") {
-  //   return <p>Loading</p>;
-  // } else {
+
   return (
     <div className="container">
       <div
@@ -73,7 +69,6 @@ function CardGroup(props: CardGroup) {
       </Link>
     </div>
   );
-  // }
 }
 
 export default CardGroup;

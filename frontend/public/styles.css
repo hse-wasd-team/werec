@@ -182,3 +182,10 @@ h2 {
   font-size: 35px;
   box-shadow: 0px 10px 10px #e0e0e0;
 }
+
+div.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
