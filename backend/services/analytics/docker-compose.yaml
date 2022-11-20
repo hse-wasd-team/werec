@@ -1,0 +1,12 @@
+version: '2.4'
+services:
+  openapi:
+    image: swaggerapi/swagger-ui
+    restart: always
+    ports:
+      - '8081:8081'
+    volumes:
+      - ./docs/openapi:/usr/src/openapi
+    environment:
+      - BASE_URL=/api/v1/docs
+      - SWAGGER_JSON=/usr/src/openapi/openapi.json

@@ -1,0 +1,541 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "werec analytics service spec",
+    "description": "This microservice collects all the events happening in our system and by deman turns this data into analytical reports. Link to our wiki: https://github.com/hse-wasd-team/werec/wiki/About",
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "/api/v1/analytics"
+    }
+  ],
+  "tags": [
+    {
+      "name": "checkup",
+      "description": "operational endpoints for system control"
+    },
+    {
+      "name": "events",
+      "description": "endpoints related to events logic"
+    },
+    {
+      "name": "reports",
+      "description": "endpoints for reports logic"
+    }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "summary": "Server health check",
+        "tags": [
+          "checkup"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server is reachable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": "A-OK"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events": {
+      "post": {
+        "summary": "Save new event record",
+        "tags": [
+          "events"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/PostUserAction"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successfully saved"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InvalidPostUserAction"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports": {
+      "post": {
+        "summary": "Create new report",
+        "tags": [
+          "reports"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/PostReport"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successfully generated"
+          },
+          "400": {
+            "description": "invalid report params",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InvalidPostReport"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "access denied"
+          }
+        }
+      }
+    },
+    "/reports/{report_id}": {
+      "get": {
+        "summary": "Get already existing report",
+        "tags": [
+          "reports"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "description": "existing report id",
+              "type": "integer",
+              "example": 2399182
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/ActivityReport"
+                        },
+                        {
+                          "$ref": "#/components/schemas/ContentAnalysisReport"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "access denied"
+          },
+          "404": {
+            "description": "report doesn't exist"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete already existing report",
+        "tags": [
+          "reports"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "description": "existing report id",
+              "type": "integer",
+              "example": 2399182
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successfully deleted"
+          },
+          "403": {
+            "description": "access denied"
+          },
+          "404": {
+            "description": "report doesn't exist"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PostUserAction": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "description": "action type",
+            "type": "string",
+            "enum": [
+              "Subscription",
+              "View"
+            ],
+            "example": "Subscription"
+          },
+          "userDevice": {
+            "description": "action type(subscription, view, etc)",
+            "type": "string",
+            "enum": [
+              "Web",
+              "Bot"
+            ],
+            "example": "Web"
+          },
+          "timestamp": {
+            "description": "action date timestamp",
+            "type": "integer",
+            "example": 1668925985
+          },
+          "objectType": {
+            "description": "domain object type",
+            "type": "string",
+            "enum": [
+              "Feed",
+              "Configuration"
+            ],
+            "example": "Feed"
+          },
+          "objectId": {
+            "description": "domain object id",
+            "type": "integer",
+            "example": 2239182
+          }
+        },
+        "required": [
+          "type",
+          "userDevice",
+          "timestamp",
+          "objectType",
+          "objectId"
+        ]
+      },
+      "InvalidPostUserAction": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "description": "invalid event type field",
+            "type": "string",
+            "example": "Invalid type provided, should be one of: [Subscription, View]"
+          },
+          "userDevice": {
+            "description": "invalid event userDevice field",
+            "type": "string",
+            "example": "Invalid userDevice provided, should be one of: [Web, Bot]"
+          },
+          "timestamp": {
+            "description": "invalid event timestamp provided",
+            "type": "string",
+            "example": "Invalid timestamp provided, should be integer"
+          },
+          "objectType": {
+            "description": "invalid event objectType provided",
+            "type": "string",
+            "example": "Invalid objectType provided, should be one of: [Feed, Configuration]"
+          },
+          "objectId": {
+            "description": "invalid event objectId provided",
+            "type": "string",
+            "example": "Object with provided type and id doesn't exist"
+          }
+        }
+      },
+      "PostReport": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reportType": {
+            "description": "report type enum",
+            "type": "string",
+            "enum": [
+              "ActivityReport",
+              "ContentAnalysisReport"
+            ]
+          },
+          "startTimestamp": {
+            "description": "start date of the data window to include into report",
+            "type": "integer",
+            "example": 1668925060
+          },
+          "endTimestamp": {
+            "description": "end date of the data window to include into report",
+            "type": "integer",
+            "example": 1668925985
+          },
+          "schedule": {
+            "description": "cron expression for automatic reports generation",
+            "type": "string",
+            "example": "0 0 12 * * ?"
+          },
+          "feedId": {
+            "description": "feed id to generate report on",
+            "type": "integer",
+            "example": 1929851
+          }
+        },
+        "required": [
+          "reportType",
+          "startTimestamp",
+          "endTimestamp"
+        ]
+      },
+      "InvalidPostReport": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reportType": {
+            "description": "invalid report type field",
+            "type": "string",
+            "example": "Invalid reportType provided, should be one of: [ActivityReport, ContentAnalysisReport]"
+          },
+          "startTimestamp": {
+            "description": "invalid startTimestamp field",
+            "type": "string",
+            "example": "Invalid startTimestamp provided, should be integer"
+          },
+          "endTimestamp": {
+            "description": "invalid endTimestamp field",
+            "type": "string",
+            "example": "Invalid endTimestamp provided, should be integer"
+          },
+          "schedule": {
+            "description": "invalid schedule field",
+            "type": "string",
+            "example": "Invalid schedule provided, should follow cron job format"
+          },
+          "feedId": {
+            "description": "invalid feed id",
+            "type": "string",
+            "example": "Feed with provided id doesn't exist"
+          }
+        }
+      },
+      "Report": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PostReport"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ownerId": {
+                "description": "report creator id",
+                "type": "integer",
+                "example": 29192
+              }
+            },
+            "required": [
+              "ownerId"
+            ]
+          }
+        ]
+      },
+      "ActivityReport": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Report"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "report": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "feedViews": {
+                    "description": "feed views during the period of time",
+                    "type": "integer",
+                    "example": 1021
+                  },
+                  "feedSubscriptions": {
+                    "description": "feed subscriptions during the period of time",
+                    "type": "integer",
+                    "example": 39
+                  },
+                  "feedConfigurationVies": {
+                    "description": "feed configuration views during the period of time",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "feedId",
+                  "feedViews",
+                  "feedSubscriptions",
+                  "feedConfigurationVies"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ContentAnalysisReport": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Report"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "report": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "topicsViews": {
+                    "description": "different topics views based on tags",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "tagName": {
+                          "description": "tag name",
+                          "type": "string",
+                          "example": "news"
+                        },
+                        "count": {
+                          "description": "views count",
+                          "type": "integer",
+                          "example": 3121
+                        }
+                      }
+                    }
+                  },
+                  "topicsSubscriptions": {
+                    "description": "different topics subscriptions based on tags",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "tagName": {
+                          "description": "tag name",
+                          "type": "string",
+                          "example": "news"
+                        },
+                        "count": {
+                          "description": "subscriptions count",
+                          "type": "integer",
+                          "example": 313
+                        }
+                      }
+                    }
+                  },
+                  "keywordsViews": {
+                    "description": "different keywords usage",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "keyword": {
+                          "description": "keyword value",
+                          "type": "string",
+                          "example": "cats"
+                        },
+                        "count": {
+                          "description": "views count",
+                          "type": "integer",
+                          "example": 10984
+                        }
+                      }
+                    }
+                  },
+                  "sourcesViews": {
+                    "description": "different sources views",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "source": {
+                          "description": "source link",
+                          "type": "string",
+                          "example": "https://www.youtube.com/channel/UCXgqm6OF3votLI6mwMD4Zkw"
+                        },
+                        "count": {
+                          "description": "link following count",
+                          "type": "integer",
+                          "example": 3185
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "topicsViews",
+                  "topicsSubscriptions",
+                  "keywordsViews",
+                  "sourcesViews"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
