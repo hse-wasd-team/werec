@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: werec analytics service spec
-  description: "This microservice collects all the events happening in our system and by deman turns this data into analytical reports"
+  description: "This microservice collects all the events happening in our system and by deman turns this data into analytical reports. Link to our wiki: https://github.com/hse-wasd-team/werec/wiki/About"
   version: 1.0.1
 servers:
   - url: /api/v1/analytics
@@ -105,10 +105,10 @@ paths:
                     oneOf:
                       - $ref: "#/components/schemas/ActivityReport"
                       - $ref: "#/components/schemas/ContentAnalysisReport"
-        "400":
-          description: report doesn't exist
         "403":
           description: access denied
+        "404":
+          description: report doesn't exist
     delete:
       summary: Delete already existing report
       tags: [reports]
@@ -123,10 +123,10 @@ paths:
       responses:
         "204":
           description: successfully deleted
-        "400":
-          description: report doesn't exist
         "403":
           description: access denied
+        "404":
+          description: report doesn't exist
 
 components:
   schemas:

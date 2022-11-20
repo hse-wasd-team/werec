@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "werec analytics service spec",
-    "description": "This microservice collects all the events happening in our system and by deman turns this data into analytical reports",
+    "description": "This microservice collects all the events happening in our system and by deman turns this data into analytical reports. Link to our wiki: https://github.com/hse-wasd-team/werec/wiki/About",
     "version": "1.0.1"
   },
   "servers": [
@@ -179,11 +179,11 @@
               }
             }
           },
-          "400": {
-            "description": "report doesn't exist"
-          },
           "403": {
             "description": "access denied"
+          },
+          "404": {
+            "description": "report doesn't exist"
           }
         }
       },
@@ -208,11 +208,11 @@
           "204": {
             "description": "successfully deleted"
           },
-          "400": {
-            "description": "report doesn't exist"
-          },
           "403": {
             "description": "access denied"
+          },
+          "404": {
+            "description": "report doesn't exist"
           }
         }
       }
