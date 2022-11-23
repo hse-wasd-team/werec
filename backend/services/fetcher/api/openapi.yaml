@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  title: WeRec Fetcher Service Spec
+  description: ""
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+externalDocs:
+  description: Find out more
+  url: https://github.com/hse-wasd-team/werec/wiki/About
+servers:
+- url: https://virtserver.swaggerhub.com/AMETHYSTONI/Fetcher/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: /api/v1/fetcher
+tags:
+- name: video
+  description: Get videos
+- name: configuration
+  description: Configuration management
+paths:
+  /videos/{configurationId}:
+    get:
+      tags:
+      - video
+      summary: Get videos
+      description: Returns an array of video links
+      operationId: getVideosByConfigurationID
+      parameters:
+      - name: configurationId
+        in: path
+        description: ID of configuration
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Returns list of video links
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                - https://www.youtube.com/watch?v=o1YenjwOp-A
+                - https://www.youtube.com/watch?v=cjO_yorTfP8
+                items:
+                  type: string
+                x-content-type: application/json
+        "400":
+          description: Invalid configuration id supplied
+        "404":
+          description: Configuration not found
+      x-swagger-router-controller: Video
+  /configuration/{configurationId}:
+    get:
+      tags:
+      - configuration
+      summary: Get configuration information by id
+      description: Returns configuration information
+      operationId: getConfigurationById
+      parameters:
+      - name: configurationId
+        in: path
+        description: ID of the configuration that needs to be altered
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Returns configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Configuration not found
+      x-swagger-router-controller: Configuration
+    put:
+      tags:
+      - configuration
+      summary: Update an existing configuration
+      description: Update an existing configuration by Id
+      operationId: updateConfiguration
+      parameters:
+      - name: configurationId
+        in: path
+        description: ID of the configuration that needs to be altered
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Update an existent configuration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPutConfigurationExample'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PostPutConfigurationExample'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostPutConfigurationExample'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Configuration not found
+        "405":
+          description: Validation exception
+      x-swagger-router-controller: Configuration
+    delete:
+      tags:
+      - configuration
+      summary: Delete configuration by ID
+      operationId: deleteConfiguration
+      parameters:
+      - name: configurationId
+        in: path
+        description: ID of the configuration that needs to be altered
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfuly deleted
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Configuration not found
+      x-swagger-router-controller: Configuration
+  /configuration/{feedId}:
+    get:
+      tags:
+      - configuration
+      summary: Get configuration by feed id
+      description: Returns all feed's configurations
+      operationId: getConfigurationByFeedId
+      parameters:
+      - name: feedId
+        in: path
+        description: ID of the feed retrieved configurations are for
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationsByFeedId'
+      x-swagger-router-controller: Configuration
+  /configuration:
+    post:
+      tags:
+      - configuration
+      summary: Add new configuration
+      description: Add new configuration
+      operationId: addConfiguration
+      requestBody:
+        description: Create new configuration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPutConfigurationExample'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PostPutConfigurationExample'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostPutConfigurationExample'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Configuration'
+        "405":
+          description: Invalid input
+      x-swagger-router-controller: Configuration
+components:
+  schemas:
+    ConfigurationsByFeedId:
+      type: array
+      example:
+      - configurationId: 45fd104c-4500-4c9c-8b49-223ea1d26d4b
+        keyword: music
+        quantity: 4
+        mode: new
+        sources:
+        - https://www.youtube.com/channel/UCgzshmpXAc1T30PHQ3Yw2lw
+        - https://www.youtube.com/c/MTV
+      - configurationId: 93fd104c-4500-4c9c-8b49-223ea1d26d4b
+        keyword: games
+        quantity: 4
+        mode: new
+        sources:
+        - https://www.youtube.com/@AstartaSky
+        - https://www.youtube.com/@Valkyrae1
+      items:
+        $ref: '#/components/schemas/Configuration'
+    Configuration:
+      type: object
+      properties:
+        configurationId:
+          type: string
+          example: 45fd104c-4500-4c9c-8b49-223ea1d26d4b
+        keyword:
+          type: string
+          example: music
+        quantity:
+          type: integer
+          example: 4
+        mode:
+          type: string
+          description: Mode
+          example: new
+          enum:
+          - new
+          - random
+        sources:
+          type: array
+          example:
+          - https://www.youtube.com/watch?v=eLAHSRmFFzE
+          - https://www.youtube.com/watch?v=gxLKrLqXGoM
+          items:
+            type: string
+      example:
+        mode: new
+        quantity: 4
+        sources:
+        - https://www.youtube.com/watch?v=eLAHSRmFFzE
+        - https://www.youtube.com/watch?v=gxLKrLqXGoM
+        configurationId: 45fd104c-4500-4c9c-8b49-223ea1d26d4b
+        keyword: music
+      xml:
+        name: configuration
+    PostPutConfigurationExample:
+      type: object
+      properties:
+        configurationId:
+          type: string
+          example: 45fd104c-4500-4c9c-8b49-223ea1d26d4b
+        keyword:
+          type: string
+          example: music
+        quantity:
+          type: integer
+          example: 4
+        mode:
+          type: string
+          description: Mode
+          example: new
+          enum:
+          - new
+          - random
+        sources:
+          type: array
+          example:
+          - https://www.youtube.com/watch?v=eLAHSRmFFzE
+          - https://www.youtube.com/watch?v=gxLKrLqXGoM
+          items:
+            type: string
