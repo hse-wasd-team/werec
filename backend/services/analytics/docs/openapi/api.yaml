@@ -140,7 +140,7 @@ components:
           type: string
           enum: [Subscription, View]
           example: Subscription
-        userDevice:
+        userDeviceType:
           description: action type(subscription, view, etc)
           type: string
           enum: [Web, Bot]
@@ -160,7 +160,7 @@ components:
           example: 2239182
       required:
         - type
-        - userDevice
+        - userDeviceType
         - timestamp
         - objectType
         - objectId
@@ -173,10 +173,10 @@ components:
           description: invalid event type field
           type: string
           example: "Invalid type provided, should be one of: [Subscription, View]"
-        userDevice:
-          description: invalid event userDevice field
+        userDeviceType:
+          description: invalid event userDeviceType field
           type: string
-          example: "Invalid userDevice provided, should be one of: [Web, Bot]"
+          example: "Invalid userDeviceType provided, should be one of: [Web, Bot]"
         timestamp:
           description: invalid event timestamp provided
           type: string
@@ -194,15 +194,15 @@ components:
       type: object
       additionalProperties: false
       properties:
-        reportType:
+        type:
           description: report type enum
           type: string
           enum: [ActivityReport, ContentAnalysisReport]
-        startTimestamp:
+        startTs:
           description: start date of the data window to include into report
           type: integer
           example: 1668925060
-        endTimestamp:
+        endTs:
           description: end date of the data window to include into report
           type: integer
           example: 1668925985
@@ -214,8 +214,12 @@ components:
           description: feed id to generate report on
           type: integer
           example: 1929851
+        ownerId:
+          description: report owner id
+          type: integer
+          example: 11231
       required:
-        - reportType
+        - report
         - startTimestamp
         - endTimestamp
 
@@ -223,10 +227,10 @@ components:
       type: object
       additionalProperties: false
       properties:
-        reportType:
+        report:
           description: invalid report type field
           type: string
-          example: "Invalid reportType provided, should be one of: [ActivityReport, ContentAnalysisReport]"
+          example: "Invalid report provided, should be one of: [ActivityReport, ContentAnalysisReport]"
         startTimestamp:
           description: invalid startTimestamp field
           type: string
@@ -274,14 +278,14 @@ components:
                   description: feed subscriptions during the period of time
                   type: integer
                   example: 39
-                feedConfigurationVies:
+                feedConfigurationViews:
                   description: feed configuration views during the period of time
                   type: integer
               required:
                 - feedId
                 - feedViews
                 - feedSubscriptions
-                - feedConfigurationVies
+                - feedConfigurationViwes
 
     ContentAnalysisReport:
       allOf:
@@ -300,7 +304,7 @@ components:
                     type: object
                     additionalProperties: false
                     properties:
-                      tagName:
+                      tag:
                         description: tag name
                         type: string
                         example: news
@@ -315,7 +319,7 @@ components:
                     type: object
                     additionalProperties: false
                     properties:
-                      tagName:
+                      tag:
                         description: tag name
                         type: string
                         example: news

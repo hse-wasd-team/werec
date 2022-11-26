@@ -6,8 +6,10 @@ Implemented by: https://github.com/zhurbey
 
 
 ## Project structure
+`TODO`: complete description
 ```
 .
+├── Dockerfile
 ├── docker-compose.yaml
 ├── Makefile
 ├── docs
@@ -19,6 +21,14 @@ docs/oenapi - openapi specification
 
 
 ## Commands
+`TODO`: describe all commands
+
 `make openapi` - start up the container with rendered openapi specification with forwarded ports 8081:8081,
 rendered documentation will be available on address: /api/v1/docs. \
 Later, ports will be forwared only for nginx container and not for openapi anymore.
+
+`make postgres` - start up container with postgres database.
+
+`make api` - run server on :8080 port, database is migrated on service initialization.
+
+`make style_check`

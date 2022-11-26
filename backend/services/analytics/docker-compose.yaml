@@ -10,3 +10,30 @@ services:
     environment:
       - BASE_URL=/api/v1/docs
       - SWAGGER_JSON=/usr/src/openapi/openapi.json
+  postgres:
+    image: postgres:latest
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2.0'
+    #       # memory: 50M
+    #     # reservations:
+    #     #   cpus: '0.25'
+    #     #   memory: 20M
+    # networks:
+    #   - werec
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - .postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=analytics_user
+      - POSTGRES_PASSWORD=analytics_pw
+      - POSTGRES_DB=analytics_db
+  # api:
+  #   build: .
+  #   restart: always
+  #   environment:
+  #     - TZ=Europe/Moscow
+  #     - analytics_db=postgres://analytics_user:analytics_pw@postgres:5432/analytics_db
