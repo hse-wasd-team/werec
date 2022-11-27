@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "x/vIJRhV/xudJd2KAS/JIMwL+k6qI4v0nPZb75cMfZMFJi+tZaPE35TqNxeF1DpHgOIJdF3reobOHAey+JavCQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\sreag\\Desktop\\werec\\backend\\services\\bot\\WeRecBot.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sreag\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\sreag\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
+    "C:\\Users\\sreag\\.nuget\\packages\\telegram.bot\\18.0.0\\telegram.bot.18.0.0.nupkg.sha512",
+    "C:\\Users\\sreag\\.nuget\\packages\\telegram.bot.extensions.polling\\1.0.2\\telegram.bot.extensions.polling.1.0.2.nupkg.sha512",
+    "C:\\Users\\sreag\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.21\\microsoft.netcore.app.host.win-x64.3.1.21.nupkg.sha512"
+  ],
+  "logs": []
+}
